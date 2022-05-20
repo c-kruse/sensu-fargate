@@ -1,4 +1,10 @@
 
+module "vpc" {
+    source = "./module/vpc"
+    name = "fargate-test"
+    default_tags = var.default_tags
+}
+
 resource "aws_ecs_cluster" "primary" {
   name = "ckruse-test"
   tags = var.default_tags
@@ -101,7 +107,7 @@ resource "aws_ecs_service" "sensu-backend" {
   network_configuration {
     subnets          = module.vpc.private_subnets
     assign_public_ip = true
-    security_groups  = [aws_security_group.default.id]
+    security_groups  = [module.vpc.default_security_group_id]
   }
   load_balancer {
     target_group_arn = aws_lb_target_group.sensu-backend-web.arn

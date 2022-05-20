@@ -109,10 +109,10 @@ resource "aws_security_group" "default" {
 }
 
 
-resource "aws_main_route_table_association" "a" {
-  vpc_id         = module.vpc.vpc_id
-  route_table_id = module.vpc.public_route_table_ids[0]
-}
+// resource "aws_main_route_table_association" "a" {
+//   vpc_id         = module.vpc.vpc_id
+//   route_table_id = module.vpc.public_route_table_ids[0]
+//}
 
 
 locals {
