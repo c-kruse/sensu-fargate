@@ -2,8 +2,8 @@ resource "aws_lb" "lb" {
   name               = "ckruse-lb"
   internal           = false
   load_balancer_type = "application"
-  subnets            = module.vpc.public_subnets
-  security_groups    = [module.vpc.lb_security_group_id]
+  subnets            = local.public-subnets
+  security_groups    = local.lb-sgs
 
   enable_deletion_protection = false
 
@@ -26,6 +26,6 @@ resource "aws_lb_target_group" "sensu-backend-web" {
   port        = 80
   protocol    = "HTTP"
   target_type = "ip"
-  vpc_id      = module.vpc.vpc_id
+  vpc_id      = local.vpc-id
 }
 

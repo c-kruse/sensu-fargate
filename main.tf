@@ -5,6 +5,14 @@ module "vpc" {
     default_tags = var.default_tags
 }
 
+locals {
+    vpc-id = module.vpc.vpc_id
+    private-subnets = module.vpc.private_subnets
+    public-subnets = module.vpc.public_subnets
+    lb-sgs = [module.vpc.lb_security_group_id]
+    task-sgs = [module.vpc.default_security_group_id]
+}
+
 resource "aws_ecs_cluster" "primary" {
   name = "ckruse-test"
   tags = var.default_tags
@@ -105,9 +113,9 @@ resource "aws_ecs_service" "sensu-backend" {
   launch_type   = "FARGATE"
 
   network_configuration {
-    subnets          = module.vpc.private_subnets
+    subnets          = local.private-subnets
     assign_public_ip = true
-    security_groups  = [module.vpc.default_security_group_id]
+    security_groups  = local.task-sgs
   }
   load_balancer {
     target_group_arn = aws_lb_target_group.sensu-backend-web.arn
